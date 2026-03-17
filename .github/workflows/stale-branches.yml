@@ -1,0 +1,26 @@
+name: Stale Branch Cleanup
+
+on:
+  schedule:
+    # Run daily at 06:00 UTC (08:00 CET / 07:00 CEST)
+    - cron: '0 6 * * *'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  stale-branches:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Remove stale branches
+        uses: fpicalausa/remove-stale-branches@v2.4.0
+        with:
+          dry-run: true
+          days-before-branch-stale: 14
+          days-before-branch-delete: 7
+          ignore-branches-with-open-prs: true
+          exempt-protected-branches: true
+          exempt-branches-regex: '^(main|master|develop|deploy/.+|release/.+|epic/.+)$'
+
